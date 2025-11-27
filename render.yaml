@@ -14,5 +14,7 @@ services:
       name: cache
       mountPath: /opt/render/cache
     healthCheckPath: /
-    github: https://github.com/aakash0131/moonpure.git
+    github:
+      repo: aakash0131/moonpure
+      branch: main
       deployOnPush: true
