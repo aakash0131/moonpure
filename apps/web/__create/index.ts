@@ -29,70 +29,78 @@ for (const method of ['log', 'info', 'warn', 'error', 'debug'] as const) {
   };
 }
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-const adapter = NeonAdapter(pool);
+// During SSR bundle build, avoid starting the server or opening handles.
+let __export_default: any;
+if (process.env.BUILD_TIME === 'true') {
+  __export_default = {} as any;
+} else {
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+  });
+  const adapter = NeonAdapter(pool);
 
-const app = new Hono();
+  const app = new Hono();
 
-app.use('*', requestId());
+  app.use('*', requestId());
 
-app.use('*', (c, next) => {
-  const requestId = c.get('requestId');
-  return als.run({ requestId }, () => next());
-});
+  app.use('*', (c, next) => {
+    const requestId = c.get('requestId');
+    return als.run({ requestId }, () => next());
+  });
 
-app.use(contextStorage());
+  app.use(contextStorage());
 
-app.onError((err, c) => {
-  if (c.req.method !== 'GET') {
-    return c.json(
-      {
-        error: 'An error occurred in your app',
-        details: serializeError(err),
-      },
-      500
+  app.onError((err, c) => {
+    if (c.req.method !== 'GET') {
+      return c.json(
+        {
+          error: 'An error occurred in your app',
+          details: serializeError(err),
+        },
+        500
+      );
+    }
+    return c.html(getHTMLForErrorPage(err), 200);
+  });
+
+  if (process.env.CORS_ORIGINS) {
+    app.use(
+      '/*',
+      cors({
+        origin: process.env.CORS_ORIGINS.split(',').map((origin) => origin.trim()),
+      })
     );
   }
-  return c.html(getHTMLForErrorPage(err), 200);
-});
 
-if (process.env.CORS_ORIGINS) {
-  app.use(
-    '/*',
-    cors({
-      origin: process.env.CORS_ORIGINS.split(',').map((origin) => origin.trim()),
-    })
-  );
+  // Auth disabled: no auth middleware/providers
+  app.all('/integrations/:path{.+}', async (c, next) => {
+    const queryParams = c.req.query();
+    const url = `${process.env.NEXT_PUBLIC_CREATE_BASE_URL ?? 'https://www.create.xyz'}/integrations/${c.req.param('path')}${Object.keys(queryParams).length > 0 ? `?${new URLSearchParams(queryParams).toString()}` : ''}`;
+
+    return proxy(url, {
+      method: c.req.method,
+      body: c.req.raw.body ?? null,
+      // @ts-ignore - this key is accepted even if types not aware and is
+      // required for streaming integrations
+      duplex: 'half',
+      redirect: 'manual',
+      headers: {
+        ...c.req.header(),
+        'X-Forwarded-For': process.env.NEXT_PUBLIC_CREATE_HOST,
+        'x-createxyz-host': process.env.NEXT_PUBLIC_CREATE_HOST,
+        Host: process.env.NEXT_PUBLIC_CREATE_HOST,
+        'x-createxyz-project-group-id': process.env.NEXT_PUBLIC_PROJECT_GROUP_ID,
+      },
+    });
+  });
+
+  // Auth routes disabled
+  app.route(API_BASENAME, api);
+
+  __export_default = await createHonoServer({
+    app,
+    defaultLogger: false,
+  });
 }
 
-// Auth disabled: no auth middleware/providers
-app.all('/integrations/:path{.+}', async (c, next) => {
-  const queryParams = c.req.query();
-  const url = `${process.env.NEXT_PUBLIC_CREATE_BASE_URL ?? 'https://www.create.xyz'}/integrations/${c.req.param('path')}${Object.keys(queryParams).length > 0 ? `?${new URLSearchParams(queryParams).toString()}` : ''}`;
-
-  return proxy(url, {
-    method: c.req.method,
-    body: c.req.raw.body ?? null,
-    // @ts-ignore - this key is accepted even if types not aware and is
-    // required for streaming integrations
-    duplex: 'half',
-    redirect: 'manual',
-    headers: {
-      ...c.req.header(),
-      'X-Forwarded-For': process.env.NEXT_PUBLIC_CREATE_HOST,
-      'x-createxyz-host': process.env.NEXT_PUBLIC_CREATE_HOST,
-      Host: process.env.NEXT_PUBLIC_CREATE_HOST,
-      'x-createxyz-project-group-id': process.env.NEXT_PUBLIC_PROJECT_GROUP_ID,
-    },
-  });
-});
-
-// Auth routes disabled
-app.route(API_BASENAME, api);
-
-export default await createHonoServer({
-  app,
-  defaultLogger: false,
-});
+export default __export_default;
