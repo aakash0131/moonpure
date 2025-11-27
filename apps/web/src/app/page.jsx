@@ -97,12 +97,12 @@ export default function HomePage() {
               created to nourish your skin and elevate your daily rituals.
             </p>
             <div className="flex justify-center space-x-4">
-              <button className="bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+              <a href="#products" className="bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors">
                 Explore Products
-              </button>
-              <button className="border border-gray-900 text-gray-900 px-8 py-3 rounded-lg hover:bg-gray-900 hover:text-white transition-colors">
+              </a>
+              <a href="#about" className="border border-gray-900 text-gray-900 px-8 py-3 rounded-lg hover:bg-gray-900 hover:text-white transition-colors">
                 Our Story
-              </button>
+              </a>
             </div>
           </div>
         </div>
