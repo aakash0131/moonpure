@@ -46,7 +46,15 @@ export default function HomePage() {
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-2">
+              <img
+                style={{
+                  borderRadius: "50%"
+                }}
+                src="/logo-moonpure.jpg"
+                alt="Moon Pure Glow"
+                className="h-10 w-10"
+              />
               <h1 className="text-2xl font-bold text-gray-900">Moon Pure</h1>
             </div>
             <div className="hidden md:block">
@@ -344,72 +352,82 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
-              <h3 className="text-2xl font-bold mb-4">Moon Pure</h3>
+              <div className="flex items-center space-x-3 mb-4">
+                <img
+                  style={{
+                    borderRadius: "50%"
+                  }}
+                  src="/logo-moonpure.jpg"
+                  alt="Moon Pure"
+                  className="h-12 w-12"
+                />
+                <h3 className="text-2xl font-bold">Moon Pure</h3>
+              </div>
               <p className="text-gray-300 mb-4">
                 Handcrafted natural products made with love. Bringing you the
                 finest soaps, lip balms, and candles for your daily rituals.
               </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li>
-                  <a href="#home" className="hover:text-white">
-                    Home
+              <div>
+                <h4 className="font-semibold mb-4">Quick Links</h4>
+                <ul className="space-y-2 text-gray-300">
+                  <li>
+                    <a href="#home" className="hover:text-white">
+                      Home
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#products" className="hover:text-white">
+                      Products
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#about" className="hover:text-white">
+                      About
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#contact" className="hover:text-white">
+                      Contact
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-4">Follow Us</h4>
+                <div className="flex items-center gap-4 text-gray-300">
+                  <a
+                    href="https://www.instagram.com/moon_pureglow/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="hover:text-white"
+                  >
+                    <Instagram className="w-6 h-6" />
                   </a>
-                </li>
-                <li>
-                  <a href="#products" className="hover:text-white">
-                    Products
+                  <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    className="hover:text-white"
+                  >
+                    <Facebook className="w-6 h-6" />
                   </a>
-                </li>
-                <li>
-                  <a href="#about" className="hover:text-white">
-                    About
+                  <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Pinterest"
+                    className="hover:text-white"
+                  >
+                    <Link2 className="w-6 h-6" />
                   </a>
-                </li>
-                <li>
-                  <a href="#contact" className="hover:text-white">
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Follow Us</h4>
-              <div className="flex items-center gap-4 text-gray-300">
-                <a
-                  href="https://www.instagram.com/moon_pureglow/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                  className="hover:text-white"
-                >
-                  <Instagram className="w-6 h-6" />
-                </a>
-                <a
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Facebook"
-                  className="hover:text-white"
-                >
-                  <Facebook className="w-6 h-6" />
-                </a>
-                <a
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Pinterest"
-                  className="hover:text-white"
-                >
-                  <Link2 className="w-6 h-6" />
-                </a>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-300">
-            <p>&copy; 2024 Moon Pure. All rights reserved.</p>
+            <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-300">
+              <p>&copy; 2024 Moon Pure. All rights reserved.</p>
+            </div>
           </div>
         </div>
       </footer>
