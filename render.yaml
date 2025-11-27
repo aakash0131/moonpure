@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: moonpure-web
+    env: node
+    plan: free
+    rootDir: apps/web
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+    autoDeploy: true
+    disk:
+      name: cache
+      mountPath: /opt/render/cache
+    healthCheckPath: /
+    github:
+      deployOnPush: true
